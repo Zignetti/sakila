@@ -22,7 +22,7 @@ insert into actor_copy
 select *
 from actor;
 
---  investigate the copy actor table
+--  investigate the copied actor table
 
 select count(*) as numRows
 from actor_copy;
@@ -41,7 +41,7 @@ count(if(last_name is null or last_name='',1,null)) as missingLastName,
 count(if(last_update is null,1,null)) as missingDates
 from actor_copy;
 
--- no missing value in any of the columns
+-- no missing values in any of the columns
 
 -- set all names to lower case
 
@@ -133,7 +133,7 @@ update address_copy
 set district= trim(replace(district,'Mxico','Mexico'));
 
 
--- check for missing rows is distric column
+-- check for missing rows in district column
 select * 
 from address_copy
 where district is null or district='';
@@ -147,7 +147,7 @@ from city
 where city_id = 121 or city_id=493 or city_id=583;
 
 -- assumption: that the district is within the city, hence we can replace the missing
--- district with the city name
+-- districts with their city names
 
 select replace(district,' ','Città del Vaticano')
 from address_copy
@@ -173,20 +173,20 @@ update address_copy
 set district= 'Yangor'
 where city_id=583;
 
--- also drop the first 2 rows as they appear as duplicate of rows 3 and 4
+-- also drop the first 2 rows as they appear as duplicate of row 3 and 4
 
 delete from address_copy
 where address_id = 1 or address_id=2;
 
--- clean address table
+-- the clean address table
 select * 
 from address_copy;
 
--- next is the category table-----------------
+---------------- next is the category table-----------------
 
 select * from category;
 
--- look okay here
+-- looks okay here
 
 ----------  next we expect the city table-------------
 
@@ -206,7 +206,7 @@ from city_copy
 group by city
 having COUNT(*) > 1;
 
--- shows the city London is duplicated
+-- shows the city 'London' is duplicated
 
 select * 
 from city_copy
@@ -232,7 +232,7 @@ update city_copy
 set city= trim(substring_index(city,'(',1));
 set sql_safe_updates=1;
 
--- clean city table
+-- the clean city table
 select*
 from city_copy;
 
@@ -280,7 +280,7 @@ select * from country_copy;
 ------ next is the customer table-----------------
 -- inspect for missing values, duplicates and standardise the names
 -- by capitalising the first letter and converting the rest to lower letters
--- keeping the email in all lower letter
+-- keeping all the emails in lower letters
 
 -- create a copy for safe manipulation
 create table customer_copy
@@ -332,7 +332,7 @@ set last_name =concat(upper(trim(substring(last_name,1,1))),
 		lower(substring(last_name,2)));
 set sql_safe_updates=1;
 
--- keep the email in all lower letters
+-- keep all the emails in lower letters
 
 set sql_safe_updates=0;
 update customer_copy
@@ -340,12 +340,12 @@ set email= lower(email);
 set sql_safe_updates=1;
 
 
--- clean customer table
+-- the clean customer table
 select *
 from customer_copy;
 
 
---- next film table------------------------
+----------- next film table------------------------
 
 -- create a copy of the table
 create table film_copy
@@ -405,7 +405,7 @@ having count(*)>1;
 
 -- no duplicate
 
--- clean film table
+-- the clean film table
 select * from film_copy;
 
 ------ film actor--------------------
@@ -446,17 +446,17 @@ drop column picture;
 alter table staff_copy
 drop column password;
 
--- clean staff table
+-- the clean staff table
 select* from staff_copy;
 
 
---- store------------------------
+-------------- store------------------------
 
 select * from store;
 
 ------------- performing join----------------------
 
--- create a temp table froma join of actor and film actor table and then join
+-- create a temp table by joining the actor and film actor table and then join
 -- the resulting table with film
 
 create temporary table combined_table as 
